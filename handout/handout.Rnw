@@ -4,6 +4,234 @@
 \SweaveOpts{concordance=TRUE}
 
 
+\documentclass[11pt]{article}
+\usepackage[margin=0.5in]{geometry}
+\linespread{1.15}
+%\setlength{\parskip}{1ex}
+%\setlength{\parindent}{0pt}
+\usepackage{parskip}
+\usepackage{siunitx}
+\sisetup{parse-numbers=false}
+\usepackage{cofi}
+\usepackage{fourier}
+\usepackage{titling}
+\usepackage[printwatermark]{xwatermark}
+\newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
+\setlength{\droptitle}{-0.6in}
+\pretitle{\Large}
+\title{Math 150}
+\posttitle{\hfill}
+\preauthor{\hfill\Large}
+\author{Project 1: Algae There For You}
+\postauthor{\hfill}
+\predate{\hfill\Large}
+\date{September 26, 2016}
+\postdate{}
+\NewDocumentCommand{\earthrho}{}{4}    % g/m^3
+\NewDocumentCommand{\eartheff}{}{300}  % W/m^2
+\NewDocumentCommand{\earthdee}{}{12}   % cm
+\NewDocumentCommand{\earthemm}{}{12}   % g/day
+\NewDocumentCommand{\spacerho}{}{8}    % g/m^3
+\NewDocumentCommand{\spaceeff}{}{1000} % W/m^2
+\NewDocumentCommand{\spacedee}{}{38}   % cm
+\begin{document}
+\thispagestyle{empty}
+\maketitle
+\sisetup{group-separator={,}}
+\thispagestyle{empty} \pagestyle{empty}
+
+\subsection*{Project goals}
+\begin{compactitem}
+    \item Practice modeling a real-world phenomenon that is not a routine
+        homework exercise
+    \item Become more comfortable with open-ended problems
+    \item Practice communicating and explaining mathematical results clearly
+        and professionally
+    \item Practice working in a team on a mathematical problem
+\end{compactitem}
+
+\subsection*{Project synopsis}
+\vspace{-2.8ex}
+
+\begin{minipage}[t][2.2in]{0.65\textwidth}
+    \vspace{0pt}
+
+    You and your group members are mathematical consultants coordinating with
+    several government agencies, including NASA, the Department of Energy, and
+    the Department of Agriculture. You all have been tasked with the
+    development of a model to help optimize the growth of algae cultures for
+    human consumption in space habitats. Your group is aware that
+    the aquaculture of algae is a highly refined science, but also
+    appreciates the value of a good initial estimate, obtained without much
+    expense. Indeed, your team will use the estimates it assembles to
+    determine whether currently planned space habitats are capable
+    of meeting the metabolic needs of their crews via algae aquaculture alone.
+    Then, you will report your findings to the government bodies listed above.
+
+        % \vspace{1.18ex}
+
+
+    \end{minipage} \hspace{1em}
+    \begin{minipage}[t][2.2in]{0.32\textwidth}
+        \vspace{0pt}
+    % \begin{figure}[h]
+        \centering
+        % \includegraphics[height=1.8in, keepaspectratio=1]{Bernal_Agriculture_AC78-0330-4_5726.jpg}
+
+        \includegraphics[width=\linewidth, keepaspectratio=1]{Torus_Interior_AC75-2621_5718.jpg}
+    % \end{figure}
+    \end{minipage}
+
+\subsection*{Useful facts and assumptions}
+\vspace{-2.8ex}
+
+    \begin{compactitem}
+
+        \item After consulting some experts on algae growth under terrestrial
+        conditions, your team has selected a few organisms for cultivation.
+        They all have about the same nutritional, temperature, and pH requirements,
+        which are not expected to change much in a space environment. Thus
+        your team has decided to ignore these factors in the modeling process.
+
+
+        \item The algae biologists gave you some formulas about algae growth,
+        but the notes from the
+        meeting were lost, and you weren't too sure you understood all of it
+        anyway. However, you do remember that they said that you can get
+        modestly good estimates using dimensional analysis.%, if you remember
+        % that unlike many scenarios you have trained on, this situation
+        % requires a constant that carries dimensions: namely, $[K] = L^8
+        % M^{-2} \Theta^{-1}$. You hope to estimate this constant from the data
+        % you have.
+
+        \item Lacking a more sophisticated model, your team agrees that
+        dimensional analysis might help in determining an expression for the
+        daily mass of algae available for harvest, $M$, in terms of the
+        concentration of nutrients, $\rho$, and other important quantities.
+
+        \item Since the algae must be grown in the space habitat, there is a fixed
+        surface area available, about \SI{1000}{m^2}. This needs to feed 36 people,
+        each of whom requires an average of \SI{1.8}{kg} algae each day.
+
+        \item You are convinced that the other important quantities are
+        the rate, $F$, at which solar energy is  delivered to the algae pond
+        surface and the depth of the algae pond, $d$. The depth of the pond
+        can't exceed \SI{\spacedee}{cm} in the habitat.
+
+        %%%%%%%%%%%%%%%%%% DIMENSIONAL ANALYSIS FORMULAS %%%%%%%%%%%%%%%%%%%%%
+        %
+        %
+        % g/day = k * (g/L)^a * (W/m^2)^b * m^c
+        % write t = T^{-1}
+        % Mt = k (Ml^3)^a (Mt^3)^b L^c
+        % Mt = k M^(a+b) L^(c-3a) T^(-3b)
+        % b = 1/3, a = 2/3, c = 2
+
+        \item Many companies and government organizations are interested in
+        algae cultivation on Earth, so some data are easily available. Your
+        team has found an example of an algae pond in which each square meter
+        of surface area yielded \SI{\earthemm}{g} of edible algae biomass each day
+        with a nutrient density of \SI{\earthrho}{g/m^3}. We can go up to \SI{\spacerho}{g/m^3} in
+        the space habitat.
+
+        \item That rate of algae production was achieved in a pond with an
+        average depth of \SI{\earthdee}{cm} and solar energy delivery of about
+        \SI{\eartheff}{W/m^2}. In space, energy delivery is greater: about
+        \SI{\spaceeff}{W/m^2}.
+
+        \item If the in-habitat pond is not sufficent for the production of algae
+        to maintain the colony of 36 people, then additional spacecraft must
+        be built and launched. The fixed costs of doing this are around
+        \SI{60}[\$]{} million, with an additional cost of \SI{2.2}[\$]{} million
+        per square meter of pond surface.
+
+    \end{compactitem}
+
+\newpage
+
+    Your team must now pull together all of its ideas to calculate an estimate
+    of the available algae capacity. If additional capacity is required, your
+    report should estimate its cost. You should report all answers with three
+    significant digits. Once you finish your calculations, your team should
+    write a professional report restating the problem and summarizing your
+    work and your findings. The mission of the colonists is critical and
+    obtaining sufficient funding is imperative. A rough report just won't do.
+    Thus, your report must contain at least one meaningful, carefully labeled
+    graph that adds something to the argument your team is making.
+
+% \newpage
+
+\subsection*{Report guidelines}
+\vspace{-2.8ex}
+
+
+\begin{compactdesc}
+    \item[Preliminary check-in:] Thursday/Friday, October 6--7, with your
+    instructor at a scheduled time.
+    \item[Final report due:] Wednesday, October 12, at the beginning of
+    class, in Canvas.
+    \item[Group evaluations due:]  Wednesday, October 12, by 11:59pm, in
+    Canvas.
+    \item[Final interview:] Thursday/Friday, October 13--14, with your
+    instructor at a scheduled time.
+    \item[Late papers/group evaluations:] will not be accepted.
+\end{compactdesc}
+
+\subsection*{Preliminary check-in and final interview meetings}
+\vspace{-2.8ex}
+
+Your group turns in one report and everyone in the group gets the same grade
+for the Written Report section for this project. The Written Report accounts
+for $35\%$ of your Project 1 grade.  The rest of your score ($65\%$) is earned
+during the Preliminary Check-in and Final Interview meetings with your
+instructor. In these meetings, you will answer a question regarding the
+development of the report's results to demonstrate your participation in the
+project. You will also submit the introduction to your report in Canvas (see
+grading rubric). You are expected to participate in the project, understanding
+both the solution to the problem and the process by which it was obtained.
+
+\subsection*{Written report}
+\vspace{-2.8ex}
+
+Use Microsoft Word or another suitable word processor. Type all equations,
+using (for example) the Microsoft Equation Editor built into Word and standard
+mathematical notation. Use RStudio to make all graphs. Graphs must include
+proper axis labels. Group members' names and class section (01, 02, or 03)
+must be clearly visible on the front page of your report. Margins will not
+exceed 1 inch and lines are to be no more than 1.5-spaced.
+
+Reports will be self-contained, i.e., the reader will not need prior knowledge
+or understanding of the problem to understand your report. Your calculations
+and conclusions will be explained in detail, as befits a professional report.
+This report will be used by people of varying mathematical background, so do
+your best to keep your report at a level accessible to the widest possible
+audience (in other words, try to write for the general public whenever
+possible). Your explanation and presentation are as important as the
+mathematics, but of course your mathematical analysis must be clear, complete,
+and correct. It should go without saying that your grammar, punctuation, and
+spelling will be flawless.
+
+\subsection*{Group evaluation}
+\vspace{-2.8ex}
+
+Every group member is required to submit to their instructor an informal group
+evaluation \emph{the same day the reports are due}. The evaluation is at most
+a short paragraph about how well the group worked together. The evaluation
+\emph{must} include your estimate of the share of the project work that you
+feel each group member did, expressed as a percentage (e.g.~33\%/33\%/33\% or
+40\%/30\%/30\%, etc.). These percentages must add to 100\%---or 99\% is close
+enough. These evaluations will be held in confidence, and used at the end of
+the semester, if necessary, to adjust final grades.
+
+\subsection*{A word to the wise}
+\vspace{-2.8ex}
+
+This project counts for 10\% of your final grade. Please make sure that
+your report's qualities of clarity, completeness, and correctness
+reflect your best abilities. Please carefully read all the instructions
+and resources provided.
+
+\end{document}
 
 
 \end{document}
