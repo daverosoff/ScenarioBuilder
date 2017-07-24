@@ -1,0 +1,163 @@
+library(mosaic)
+library(tidyverse)
+
+options(digits=4)
+wks <- seq(1,12)
+
+fuzz <- function(pointlist)
+{
+  n <- length(pointlist)
+  fz <- runif(n, min = -0.05, max = 0.05)
+  pointlist + fz
+}
+
+randomSurge <- function(pointlist)
+{
+  a <- runif(1, min = 8, max = 14)
+  b <- runif(1, min = 0.4, max = 0.6)
+  mod <- makeFun(a*t*exp(-b*t)~t, a=a, b=b)
+  mod(pointlist)
+}
+
+randomTrig <- function(pointlist) 
+{
+  A <- runif(1, min = 6, max = 8)
+  B <- 0.25
+  C <- runif(1, min = 0.5, max = 2.5)
+  mod <- makeFun(A*sin(B*t) + C~t, A=A, B=B, C=C)
+  mod(pointlist)
+}
+
+randomExp <- function(pointlist) {
+  A <- runif(1, min = 1.8, max = 2.4)
+  b <- runif(1, min = 0.07, 0.12)
+  mod <- makeFun(A*exp(b*t)~t, A=A, b=b)
+  mod(pointlist)
+}
+
+randomPoly <- function(pointlist) {
+  a <- -0.003
+  b1 <- runif(1, min=1.05, max=1.20)
+  b2 <- runif(1, min=1.95, max=2.05)
+  b3 <- runif(1, min=13, max=15)
+  mod <- makeFun(a*(t-b1)*(t-b2)^2*(t-b3)~t, a=a, b1=b1, b2=b2, b3=b3)
+  mod(pointlist)
+}
+
+res <- function(vals, pointlist, mod)
+{
+  result = vals - mod(pointlist)
+  sqrt(sum(result*result))
+}
+
+testData <- function(xs, ys, mtype)
+{
+  if (mtype == "S" | mtype == "surge") {
+    mxs <- -1*xs
+    project(log(ys)~1+log(xs)+mxs) -> S
+    S <- as.vector(S)
+    a <- S[1]
+    b <- S[2]
+    d <- S[3]
+    mod <- makeFun(exp(a)*b*t*exp(-d*t)~t, a=a, b=b, d=d)
+    res(ys, xs, mod)
+  }
+  else if (mtype == "T" | mtype == "trig") {
+    project(ys~1+sin(0.25*xs)) -> TT
+    TT <- as.vector(TT)
+    a <- TT[1]
+    b <- TT[2]
+    mod <- makeFun(a + b*sin(0.25*t)~t, a=a, b=b)
+    res(ys, xs, mod)
+  }
+  else if (mtype == "E" | mtype == "exp") {
+    project(log(ys)~1+xs) -> E
+    E <- as.vector(E)
+    a <- E[1]
+    b <- E[2]
+    mod <- makeFun(exp(a)*exp(b*t)~t, a=a, b=b)
+    res(ys, xs, mod)
+  }
+  else if (mtype == "P" | mtype == "poly") {
+    xs2 <- xs*xs
+    xs3 <- xs2*xs
+    xs4 <- xs3*xs
+    project(ys~1+xs+xs2+xs3+xs4) -> P
+    P <- as.vector(P)
+    a1 <- P[1]
+    a2 <- P[2]
+    a3 <- P[3]
+    a4 <- P[4]
+    a5 <- P[5]
+    mod <- makeFun(a1+a2*t+a3*t^2+a4*t^3+a5*t^4~t, a1=a1, a2=a2, a3=a3, a4=a4, a5=a5)
+    res(ys, xs, mod)
+  }
+  else # bad input
+  {
+    -1
+  }
+}
+
+getWinningType <- function(xs, ys)
+{
+  resS <- testData(xs, ys, "S")
+  resT <- testData(xs, ys, "T")
+  resE <- testData(xs, ys, "E")
+  resP <- testData(xs, ys, "P")
+  labs <- c("S", "T", "E", "P")
+  vals <- c(resS, resT, resE, resP)
+  pos <- which.min(vals)
+  labs[pos]
+}
+  
+randomScenario <- function(modeltype, pointlist)
+{
+  if (modeltype == "S") {modelVec <- randomSurge}
+  if (modeltype == "T") {modelVec <- randomTrig}
+  if (modeltype == "E") {modelVec <- randomExp}
+  if (modeltype == "P") {modelVec <- randomPoly}
+  repeat {
+    p <- modelVec(pointlist)
+    if (getWinningType(pointlist, p) == modeltype)
+    {
+      break
+    }
+  }
+  pp <- tibble(modelType=modeltype, 
+               t01=p[1],
+               t02=p[2],
+               t03=p[3],
+               t04=p[4],
+               t05=p[5],
+               t06=p[6],
+               t07=p[7],
+               t08=p[8],
+               t09=p[9],
+               t10=p[10],
+               t11=p[11],
+               t12=p[12]
+               )
+  pp
+}
+
+scenarios <- tibble(
+  modelType = character(), 
+  t01 = numeric(),
+  t02 = numeric(),
+  t03 = numeric(),
+  t04 = numeric(),
+  t05 = numeric(),
+  t06 = numeric(),
+  t07 = numeric(),
+  t08 = numeric(),
+  t09 = numeric(),
+  t10 = numeric(),
+  t11 = numeric(),
+  t12 = numeric()
+  )
+
+for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('S', wks)) } 
+for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('T', wks)) } 
+for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('E', wks)) } 
+for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('P', wks)) } 
+scenarios %>% print(n = Inf)
