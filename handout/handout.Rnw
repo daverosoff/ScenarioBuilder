@@ -19,7 +19,7 @@
 \author{Project 2: Budworms}
 \postauthor{\hfill}
 \predate{\hfill\Large}
-\date{November XX, 2017}
+\date{November 6, 2017}
 \postdate{}
 
 \begin{document}
@@ -101,7 +101,7 @@
 
     \end{compactitem}
 
-\newpage
+% \newpage
 
     Your team must now pull together all of its ideas to model the budworm
     population and determine whether a pesticide intervention will be required
@@ -114,7 +114,7 @@
     your team is making. You should report all answers with three significant
     digits.
 
-% \newpage
+\newpage
 
 \subsection*{Report guidelines}
 \vspace{-2.8ex}
