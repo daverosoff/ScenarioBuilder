@@ -50,6 +50,14 @@ res <- function(vals, pointlist, mod) {
   sqrt(sum(result*result))
 }
 
+extract <- function(scenario, num=TRUE) {
+  if (num) {
+    as.numeric(scenario[,2:13])
+  } else {
+    scenario[,2:13]
+  }
+}
+
 getModel <- function(xs, ys, mtype) {
   if (mtype == "S" | mtype == "surge") {
     mxs <- -1*xs
