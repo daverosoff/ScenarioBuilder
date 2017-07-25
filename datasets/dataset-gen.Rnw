@@ -1,0 +1,93 @@
+\documentclass{article}
+
+\usepackage[margin=0.5in]{geometry}
+\linespread{1.15}
+%\setlength{\parskip}{1ex}
+%\setlength{\parindent}{0pt}
+% \usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{cofi}
+% \usepackage{fourier}
+\usepackage{titling}
+\usepackage{lipsum}
+% \usepackage[printwatermark]{xwatermark}
+% \newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
+% \setlength{\droptitle}{-0.6in}
+\pretitle{\Large}
+\title{Math 150}
+\posttitle{\hfill}
+\preauthor{\hfill\Large}
+\author{Project 2 dataset and other important information}
+\postauthor{\hfill}
+\predate{\hfill\Large}
+\date{Fall 2017}
+\postdate{}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\thispagestyle{empty}
+\maketitle
+\sisetup{group-separator={,}}
+\thispagestyle{empty} \pagestyle{empty}
+
+<<echo=FALSE>>=
+source("../sb.R")
+@
+
+<<echo=FALSE>>=
+library(tidyverse)
+library(mosaic)
+library(stringr)
+library(uuid)
+currtime <- lubridate::now()
+currtime.s <- gsub(pattern="[\\s :]", replacement="-", x=currtime)
+lasttime <- as.numeric(str_sub(currtime, -2, -1)) %% 4
+if (lasttime == 0) {
+    pairtype <- c("S", "P")
+} else if (lasttime == 1) {
+    pairtype <- c("S", "T")
+} else if (lasttime == 2) {
+    pairtype <- c("T", "E")
+} else if (lasttime == 3) {
+    pairtype <- c("E", "P")
+}
+id <- str_sub(UUIDgenerate(), 1, 8)
+pick <- sample(1:2, 1)
+other <- ifelse(pick == 1, 2, 1)
+modelType <- pairtype[pick]
+otherType <- pairtype[other]
+datafilename <- paste0("budworm-", id, ".csv")
+urlbase <- "https://webwork.collegeofidaho.edu/MAT150Resources/"
+datafileurl <- paste0(urlbase, datafilename)
+winner <- randomScenario(modelType, wks)
+init.budworm <- 1000 * sample(2:7, 1)
+crit.budworm <- 40 * init.budworm
+crit.pct <- 5 * sample(10:17, 1)
+@
+
+<<echo=FALSE>>=
+winnerModel <- getModel(wks, winner, modelType)
+otherModel <- getModel(wks, winner, otherType)
+winnerRes <- res(winnerModel, winner)
+@
+
+\section*{Group ID: \Sexpr{id}}
+
+Your dataset is available at
+
+{\centering{}\texttt{\Sexpr{datafileurl}}}
+
+Note also that
+\begin{compactenum}
+    \item Forest service entomology crews reported about
+    \num{\Sexpr{init.budworm}} budworm larvae per square meter on May 1.
+    \item The critical threshold for forest destruction is \num{\Sexpr{crit.budworm}}
+    budworm larvae per square meter.
+    \item The pesticide is only effective if it is applied before the
+    population growth rate ever exceeds \SI{\Sexpr{crit.pct}}{\%} of its
+    maximum. Otherwise, budworm reproduction is too quick and the infestation
+    will persist.
+\end{compactenum}
+
+\end{document}
