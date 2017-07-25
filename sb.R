@@ -11,12 +11,17 @@ fuzz <- function(pointlist)
   pointlist + fz
 }
 
+vpos <- function(v)
+{
+  pmax(rep(0, length(v)), v)
+}
+
 randomSurge <- function(pointlist)
 {
   a <- runif(1, min = 8, max = 14)
   b <- runif(1, min = 0.4, max = 0.6)
   mod <- makeFun(a*t*exp(-b*t)~t, a=a, b=b)
-  mod(pointlist)
+  vpos(mod(pointlist))
 }
 
 randomTrig <- function(pointlist) 
@@ -25,14 +30,14 @@ randomTrig <- function(pointlist)
   B <- 0.25
   C <- runif(1, min = 0.5, max = 2.5)
   mod <- makeFun(A*sin(B*t) + C~t, A=A, B=B, C=C)
-  mod(pointlist)
+  vpos(mod(pointlist))
 }
 
 randomExp <- function(pointlist) {
   A <- runif(1, min = 1.8, max = 2.4)
   b <- runif(1, min = 0.07, 0.12)
   mod <- makeFun(A*exp(b*t)~t, A=A, b=b)
-  mod(pointlist)
+  vpos(mod(pointlist))
 }
 
 randomPoly <- function(pointlist) {
@@ -41,7 +46,7 @@ randomPoly <- function(pointlist) {
   b2 <- runif(1, min=1.95, max=2.05)
   b3 <- runif(1, min=13, max=15)
   mod <- makeFun(a*(t-b1)*(t-b2)^2*(t-b3)~t, a=a, b1=b1, b2=b2, b3=b3)
-  mod(pointlist)
+  vpos(mod(pointlist))
 }
 
 res <- function(vals, pointlist, mod)
@@ -160,4 +165,10 @@ for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('S', wk
 for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('T', wks)) } 
 for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('E', wks)) } 
 for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('P', wks)) } 
+
 scenarios %>% print(n = Inf)
+
+write_scenarios <- function() {
+  currtime <- gsub(pattern="[\\s :]", replacement = "-", x = lubridate::now())
+  write_csv(scenarios, path=paste0("~/ScenarioBuilder/scenarios/", currtime, "-scenarios.csv"), append=FALSE)
+}
