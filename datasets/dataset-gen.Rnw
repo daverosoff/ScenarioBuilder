@@ -67,9 +67,10 @@ crit.pct <- 5 * sample(10:17, 1)
 @
 
 <<echo=FALSE>>=
-winnerModel <- getModel(wks, winner, modelType)
-otherModel <- getModel(wks, winner, otherType)
-winnerRes <- res(winnerModel, winner)
+winner.ys <- extract(winner)
+winnerModel <- getModel(wks, winner.ys, modelType)
+otherModel <- getModel(wks, winner.ys, otherType)
+winnerRes <- res(winner.ys, wks, winnerModel)
 @
 
 \section*{Group ID: \Sexpr{id}}
