@@ -89,9 +89,9 @@
 
         \item If at any time during the season the budworm population exceeds
         the critical threshold, the forest will largely be destroyed. However,
-        if pesticides can be applied before the population growth rate ever
-        reaches 80\% of its maximum, the budworms can be killed en masse and
-        the forest will be saved.
+        if pesticides can be applied within 10 weeks of the time the 
+        population growth rate first reaches 80\% of its maximum, the budworms
+        can be killed en masse and the forest will be saved.
 
         \item The pesticide is very effective, but it is expensive to apply.
         Human workers must spray the trees by hand. It cannot be dropped
