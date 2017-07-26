@@ -1,7 +1,7 @@
 library(mosaic)
 library(tidyverse)
 
-options(digits=4)
+options(digits=4, scipen=1e10)
 wks <- seq(1,12)
 
 fuzz <- function(pointlist) {
@@ -128,6 +128,7 @@ randomScenario <- function(modeltype, pointlist) {
       break
     }
   }
+  p <- 100 * p
   pp <- tibble(modelType=modeltype, 
                t01=p[1],
                t02=p[2],
