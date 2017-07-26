@@ -67,8 +67,8 @@ init.budworm <- 200 * sample(2:7, 1)
 crit.budworm <- 0.3 * sample(2:7, 1) * init.budworm
 crit.pct <- 5 * sample(10:17, 1)
 forest.size <- 1e3 * sample(7:13, 1)
-sqkm.cost <- 10 * sample(8:12, 1)
-budworm.cost <- 0.01 * sample(3:6, 1)
+sqkm.cost <- 1 * sample(8:12, 1)
+budworm.cost <- 0.004 * sample(3:6, 1)
 forest.budget <- 1e6
 #winner
 @
@@ -104,10 +104,10 @@ Note also that
     \item The pesticide is only effective if it is applied within 10 weeks after the
     population growth rate first exceeds \SI{\Sexpr{crit.pct}}{\%} of its
     maximum. Otherwise, budworm reproduction is too quick and the infestation
-    will persist.
-    \item There is a fixed cost of \Sexpr{sqkm.cost} per square kilometer and variable
-    cost of \Sexpr{budworm.cost} per thousand budworm larvae per square meter. The budget
-    for your forest is \Sexpr{forest.budget}.
+    will persist. It can be applied as soon as the first day of week 14.
+    \item There is a fixed cost of \Sexpr{sqkm.cost} dollars per square kilometer and variable
+    cost of \Sexpr{budworm.cost} dollars per thousand budworm larvae per square meter. The budget
+    for your forest is \Sexpr{forest.budget} dollars.
 \end{compactenum}
 
 %%%%%%%%%%%% BEGIN ANSWER KEY SECTION %%%%%%%%%%%%%%
@@ -150,7 +150,7 @@ Note also that
   as.matrix(rbind(crit_pt, rate_val))
   rate_exceeded <- makeFun(winnerModel(x)-critrate~x, critrate=critrate)
   rate_exceeded_time <- findZeros(rate_exceeded(x)~x, x.lim=range(0,26))[[1,1]]
-  rate_too_late <- rate_exceeded_time < 2
+  rate_too_late <- rate_exceeded_time < 4
 @
   \item Critical rate threshold: \Sexpr{critrate}
   \item Rate first exceeded: \Sexpr{rate_exceeded_time}
