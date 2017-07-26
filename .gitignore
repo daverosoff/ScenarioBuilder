@@ -4,3 +4,8 @@
 .Ruserdata
 server.R
 ui.R
+**/*.pdf
+**/*.aux
+**/*.synctex.gz
+**/*.log
+**/*.xwm
