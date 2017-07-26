@@ -1,8 +1,18 @@
 library(mosaic)
 library(tidyverse)
 
-options(digits=4, scipen=1e10)
+options(digits=4)
 wks <- seq(1,12)
+
+sn <- function(x,digits)
+{
+  if (x==0) return("0")
+  ord <- floor(log(abs(x),10))
+  x <- x / 10^ord
+  if (!missing(digits)) x <- format(x,digits=digits)
+  if (ord==0) return(as.character(x))
+  return(paste(x,"\\\\times 10^{",ord,"}",sep=""))
+}
 
 fuzz <- function(pointlist) {
   n <- length(pointlist)
@@ -12,6 +22,24 @@ fuzz <- function(pointlist) {
 
 vpos <- function(v) {
   pmax(rep(0, length(v)), v)
+}
+
+getFormula <- function(modeltype) {
+  if (modeltype == "S") { 
+    "$at e^{-bt}$" 
+  } else if (modeltype == "T") { 
+    "$A \\\\sin{(0.25t)} + C$"
+  } else if (modeltype == "E") { 
+    "$A e^{bt}$"
+  } else if (modeltype == "P") { 
+    "$a_0 + a_1 t + a_2 t^2 + a_3 t^3 + a_4 t^4$"
+  }
+}
+
+printFormula <- function(modeltype, mod) {
+  if (modeltype == "S") {
+    
+  }
 }
 
 randomSurge <- function(pointlist) {
@@ -45,8 +73,8 @@ randomPoly <- function(pointlist) {
   vpos(mod(pointlist))
 }
 
-res <- function(vals, pointlist, mod) {
-  result = vals - mod(pointlist)
+res <- function(pointlist, vals, mdl) {
+  result <- vals - mdl(pointlist)
   sqrt(sum(result*result))
 }
 
@@ -58,7 +86,7 @@ extract <- function(scenario, num=TRUE) {
   }
 }
 
-getModel <- function(xs, ys, mtype) {
+getModel <- function(xs, ys, mtype, visible=FALSE) {
   if (mtype == "S" | mtype == "surge") {
     mxs <- -1*xs
     project(log(ys)~1+log(xs)+mxs) -> S
@@ -67,6 +95,11 @@ getModel <- function(xs, ys, mtype) {
     b <- S[2]
     d <- S[3]
     mod <- makeFun(exp(a)*b*t*exp(-d*t)~t, a=a, b=b, d=d)
+    if (visible) {
+      paste("$", exp(a)*b, "t e^{", -d, "t}$")
+    } else { 
+      mod 
+    }
   }
   else if (mtype == "T" | mtype == "trig") {
     project(ys~1+sin(0.25*xs)) -> TT
@@ -74,6 +107,11 @@ getModel <- function(xs, ys, mtype) {
     a <- TT[1]
     b <- TT[2]
     mod <- makeFun(a + b*sin(0.25*t)~t, a=a, b=b)
+    if (visible) {
+      paste("$", a, " + ", b, "\\\\sin{(0.25t)}$")
+    } else { 
+      mod 
+    }
   }
   else if (mtype == "E" | mtype == "exp") {
     project(log(ys)~1+xs) -> E
@@ -81,6 +119,11 @@ getModel <- function(xs, ys, mtype) {
     a <- E[1]
     b <- E[2]
     mod <- makeFun(exp(a)*exp(b*t)~t, a=a, b=b)
+    if (visible) {
+      paste("$", exp(a), "e^{", b, "t}$")
+    } else { 
+      mod 
+    }
   }
   else if (mtype == "P" | mtype == "poly") {
     xs2 <- xs*xs
@@ -93,8 +136,13 @@ getModel <- function(xs, ys, mtype) {
     a3 <- P[3]
     a4 <- P[4]
     a5 <- P[5]
-    mod <- makeFun(a1+a2*t+a3*t^2+a4*t^3+a5*t^4~t, 
+    mod <- makeFun(a1+a2*t+a3*t^2+a4*t^3+a5*t^4~t,
                    a1=a1, a2=a2, a3=a3, a4=a4, a5=a5)
+    if (visible) {
+      paste("\\\\begin{multline}", a1, " + ", a2, "t + \\\\\\\\", a3, "t^2 + ", a4, "t^3 + ", a5, "t^4\\\\end{multline}")
+    } else { 
+      mod 
+    }
   } else { # bad input
     -1
   }
@@ -115,7 +163,7 @@ getWinningType <- function(xs, ys) {
   pos <- which.min(vals)
   labs[pos]
 }
-  
+
 randomScenario <- function(modeltype, pointlist) {
   if (modeltype == "S") {modelVec <- randomSurge}
   if (modeltype == "T") {modelVec <- randomTrig}
@@ -128,8 +176,7 @@ randomScenario <- function(modeltype, pointlist) {
       break
     }
   }
-  p <- 100 * p
-  pp <- tibble(modelType=modeltype, 
+  pp <- tibble(modelType=modeltype,
                t01=p[1],
                t02=p[2],
                t03=p[3],
@@ -142,12 +189,12 @@ randomScenario <- function(modeltype, pointlist) {
                t10=p[10],
                t11=p[11],
                t12=p[12]
-               )
+  )
   pp
 }
 
 # scenarios <- tibble(
-#   modelType = character(), 
+#   modelType = character(),
 #   t01 = numeric(),
 #   t02 = numeric(),
 #   t03 = numeric(),
@@ -162,10 +209,10 @@ randomScenario <- function(modeltype, pointlist) {
 #   t12 = numeric()
 #   )
 
-# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('S', wks)) } 
-# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('T', wks)) } 
-# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('E', wks)) } 
-# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('P', wks)) } 
+# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('S', wks)) }
+# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('T', wks)) }
+# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('E', wks)) }
+# for (i in seq(1, 10)) { scenarios <- bind_rows(scenarios, randomScenario('P', wks)) }
 
 # scenarios %>% print(n = Inf)
 
