@@ -81,7 +81,7 @@
 
         \item Faced with limited scientific information,
         your team has to construct a model for how the budworm population over
-        the course of a single season (May 1 to October 31). Based on past
+        the course of a single season (May 1 to October 31, roughly 26 weeks). Based on past
         studies, your group has decided to try to fit the data from the forest
         service on the rate of budworm growth to one of two models,
         using vector projection. Your choice of which model is best will be
