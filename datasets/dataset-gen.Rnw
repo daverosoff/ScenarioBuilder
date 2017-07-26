@@ -12,7 +12,7 @@
 \usepackage{lipsum}
 % \usepackage[printwatermark]{xwatermark}
 % \newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
-% \setlength{\droptitle}{-0.6in}
+\setlength{\droptitle}{-0.6in}
 \pretitle{\Large}
 \title{Math 150}
 \posttitle{\hfill}
@@ -62,7 +62,7 @@ urlbase <- "https://webwork.collegeofidaho.edu/MAT150Resources/"
 datafileurl <- paste0(urlbase, datafilename)
 winner <- randomScenario(modelType, wks)
 init.budworm <- 1000 * sample(2:7, 1)
-crit.budworm <- 40 * init.budworm
+crit.budworm <- 10 * sample(2:4, 1) * init.budworm
 crit.pct <- 5 * sample(10:17, 1)
 @
 
@@ -71,6 +71,9 @@ winner.ys <- extract(winner)
 winnerModel <- getModel(wks, winner.ys, modelType)
 otherModel <- getModel(wks, winner.ys, otherType)
 winnerRes <- res(winner.ys, wks, winnerModel)
+winner2D <- D(winnerModel(x)~x)
+fz <- findZeros(winner2D(x)~x, x.lim=range(0,12))
+fz
 @
 
 \section*{Group ID: \Sexpr{id}}
