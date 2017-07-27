@@ -32,7 +32,7 @@
 \thispagestyle{empty} \pagestyle{empty}
 
 <<echo=FALSE>>=
-source("../sb.R")
+source("sb.R")
 @
 
 <<echo=FALSE>>=
