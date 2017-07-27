@@ -53,6 +53,7 @@ if (lasttime == 0) {
     pairtype <- c("E", "P")
 }
 id <- str_sub(UUIDgenerate(), 1, 8)
+write_file(id, "group_id.txt")
 pick <- sample(1:2, 1)
 other <- ifelse(pick == 1, 2, 1)
 modelType <- pairtype[pick]
@@ -160,7 +161,7 @@ Note also that
   \item Rate first exceeded: \Sexpr{rate_exceeded_time}
   \item Too late for pesticide: \Sexpr{ifelse(rate_too_late, "yes", "no")}
   \item Pop.{} threshold first exceeded: \Sexpr{ifelse(pop_thresh, pop_exceeded_time, "Never")}
-  \item Spraying necessary: \Sexpr{ifelse(pop_thresh && pop_exceeded_time < 22, "Yes", "No")}
+  \item Spraying necessary: \Sexpr{ifelse(pop_thresh && pop_exceeded_time < 22, "yes", "no")}
   \item Fixed cost of spraying: \Sexpr{fc <- forest.size * sqkm.cost}
   \item Variable cost of spraying: \Sexpr{vc <- (winnerInt(12) - winnerInt(0) + init.budworm)*forest.size*budworm.cost}
   \item Total cost of spraying: \Sexpr{fc + vc -> tc}
@@ -180,5 +181,7 @@ plotFun(winnerInt(x)+b~x, x.lim=range(0,26), b=init.budworm)
 plotFun(b~x, b=crit.budworm, add=TRUE, col='blue')
 @
 
+
+%%%%%%%%%%%% END ANSWER KEY SECTION %%%%%%%%%%%%%%
 
 \end{document}
