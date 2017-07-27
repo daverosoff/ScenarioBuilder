@@ -19,6 +19,7 @@ def newscen():
     newRnw = group_id + ".Rnw"
     newsoltex = group_id + "-solution.tex"
     newsolpdf = group_id + "-solution.pdf"
+    csv = "budworm-" + group_id + ".csv"
     newf = [newRnw, newsoltex, newsolpdf]
     shutil.move("dataset-gen.Rnw", newRnw)
     shutil.move("dataset-gen.tex", newsoltex)
@@ -27,6 +28,7 @@ def newscen():
     os.mkdir(group_id)
     for f in newf:
         shutil.copy2(tmpdir + "/" + f, group_id)
+    shutil.copy2(tmpdir + "/" + csv, group_id)
     os.chdir(group_id)
     redactedtex = re.sub("-solution.tex", ".tex", newsoltex)
     redactedpdf = re.sub("tex$", "pdf", redactedtex)
