@@ -33,6 +33,7 @@ def newscen():
     sedcall = '/BEGIN ANSWER KEY SECTION/,/END ANSWER KEY SECTION/d'
     with open(redactedtex, 'w') as target:
         subprocess.call(["sed", "-e", sedcall, newsoltex], stdout=target)
+    shutil.rmtree("../" + tmpdir)
     tmpdir = tempfile.mkdtemp(prefix="redacted-", dir=".")
     print("Moving", redactedtex, "to", tmpdir)
     shutil.move(redactedtex, tmpdir)
@@ -48,11 +49,12 @@ def newscen():
         shutil.rmtree(tmpdir)
     except e:
         print(e)
+    os.chdir("..")
 
 parser = argparse.ArgumentParser(description="Generate new scenario and key.")
 parser.add_argument('--num', default=1, help="Number of scenarios to generate")
 args = parser.parse_args()
 
-for i in range(args.num):
+for i in range(int(args.num)):
     newscen()
 
