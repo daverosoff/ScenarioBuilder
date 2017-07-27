@@ -24,7 +24,7 @@
 \postdate{}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE, digits=4, scipen=17}
+\SweaveOpts{concordance=FALSE, digits=4, scipen=17}
 
 \thispagestyle{empty}
 \maketitle
