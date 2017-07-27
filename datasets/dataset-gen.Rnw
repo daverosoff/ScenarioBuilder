@@ -155,7 +155,7 @@ Note also that
   rate_too_late <- rate_exceeded_time < 4
   pop_exceeded <- makeFun(winnerInt(x) - winnerInt(0)-crit.budworm~x, crit.budworm=crit.budworm)
   pop_exceeded_time <- findZeros(pop_exceeded(x)~x, x.lim=range(0,26))
-  pop_thresh <- !purrr::is.empty(pop_exceeded_time)
+  pop_thresh <- length(pop_exceeded_time) == 0
 @
   \item Critical rate threshold: \Sexpr{critrate}
   \item Rate first exceeded: \Sexpr{rate_exceeded_time}
