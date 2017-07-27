@@ -64,12 +64,13 @@ datafilename <- paste0("budworm-", id, ".csv")
 urlbase <- "https://webwork.collegeofidaho.edu/MAT150Resources/"
 datafileurl <- paste0(urlbase, datafilename)
 winner <- randomScenario(modelType, wks)
+write_csv(winner %>% select(-modelType), paste0("budworm-", id, ".csv"))
 init.budworm <- 200 * sample(2:7, 1)
-crit.budworm <- 0.3 * sample(2:7, 1) * init.budworm
+crit.budworm <- 0.35 * sample(3:7, 1) * init.budworm
 crit.pct <- 5 * sample(10:17, 1)
 forest.size <- 1e3 * sample(7:13, 1)
 sqkm.cost <- 1 * sample(8:12, 1)
-budworm.cost <- 0.004 * sample(3:6, 1)
+budworm.cost <- 0.008 * sample(3:6, 1)
 forest.budget <- 1e6
 #winner
 @
@@ -78,8 +79,8 @@ forest.budget <- 1e6
 winner.ys <- extract(winner)
 winnerModel <- getModel(wks, winner.ys, modelType)
 otherModel <- getModel(wks, winner.ys, otherType)
-winnerRes <- res(winner.ys, wks, winnerModel)
-otherRes <- res(winner.ys, wks, otherModel)
+winnerRes <- res(wks, winner.ys, winnerModel)
+otherRes <- res(wks, winner.ys, otherModel)
 winner2D <- D(winnerModel(x)~x)
 fz <- findZeros(winner2D(x)~x, x.lim=range(0,26))
 winnerInt <- antiD(winnerModel(x)~x)
@@ -95,6 +96,25 @@ Your dataset is available at
 
 {\centering{}\texttt{\Sexpr{datafileurl}}}
 
+It reports the growth rate in budworm larvae per square meter per week for
+each of the first 12 weeks of the season, as measured by the forest service
+agencies. The two models you have to choose from are
+
+<<echo=FALSE>>=
+winnerfirst <- sample(0:1, 1)
+if (winnerfirst == 0) {
+  fst <- getFormula(modelType)
+  snd <- getFormula(otherType)
+} else {
+  fst <- getFormula(otherType)
+  snd <-getFormula(modelType)
+}
+@
+
+\begin{center}
+  \Sexpr{fst} and \Sexpr{snd}.
+\end{center}
+
 Note also that
 \begin{compactenum}
     \item Forest service entomology crews reported about
@@ -108,7 +128,7 @@ Note also that
     maximum. Otherwise, budworm reproduction is too quick and the infestation
     will persist. It can be applied as soon as the first day of week 14.
     \item There is a fixed cost of \Sexpr{sqkm.cost} dollars per square kilometer and variable
-    cost of \Sexpr{budworm.cost} dollars per thousand budworm larvae per square meter. The budget
+    cost of \Sexpr{budworm.cost} dollars per thousand budworm larvae per square kilometer. The budget
     for your forest is \Sexpr{forest.budget} dollars.
 \end{compactenum}
 
@@ -175,6 +195,8 @@ Note also that
 %   }
 % @
 \end{compactenum}
+
+\newpage
 
 <<fig=TRUE, out.width=3>>=
 plotFun(winnerInt(x)+b~x, x.lim=range(0,26), b=init.budworm)
