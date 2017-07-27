@@ -40,7 +40,6 @@ library(tidyverse)
 library(mosaic)
 library(stringr)
 library(uuid)
-library(purrr)
 currtime <- lubridate::now()
 currtime.s <- gsub(pattern="[\\s :]", replacement="-", x=currtime)
 lasttime <- as.numeric(str_sub(currtime, -2, -1)) %% 4
@@ -155,13 +154,13 @@ Note also that
   rate_too_late <- rate_exceeded_time < 4
   pop_exceeded <- makeFun(winnerInt(x) - winnerInt(0)-crit.budworm~x, crit.budworm=crit.budworm)
   pop_exceeded_time <- findZeros(pop_exceeded(x)~x, x.lim=range(0,26))
-  pop_thresh <- length(pop_exceeded_time) == 0
+  pop_thresh <- length(pop_exceeded_time) != 0
 @
   \item Critical rate threshold: \Sexpr{critrate}
   \item Rate first exceeded: \Sexpr{rate_exceeded_time}
   \item Too late for pesticide: \Sexpr{ifelse(rate_too_late, "yes", "no")}
-  \item Pop.{} threshold first exceeded: \Sexpr{pop_exceeded_time}
-  \item Spraying necessary: \Sexpr{pop_thresh & pop_exceeded_time < 22}
+  \item Pop.{} threshold first exceeded: \Sexpr{ifelse(pop_thresh, pop_exceeded_time, "Never")}
+  \item Spraying necessary: \Sexpr{ifelse(pop_thresh && pop_exceeded_time < 22, "Yes", "No")}
   \item Fixed cost of spraying: \Sexpr{fc <- forest.size * sqkm.cost}
   \item Variable cost of spraying: \Sexpr{vc <- (winnerInt(12) - winnerInt(0) + init.budworm)*forest.size*budworm.cost}
   \item Total cost of spraying: \Sexpr{fc + vc -> tc}
