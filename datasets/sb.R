@@ -171,12 +171,12 @@ randomScenario <- function(modeltype, pointlist) {
   if (modeltype == "P") {modelVec <- randomPoly}
   repeat {
     p <- modelVec(pointlist)
+    p <- vpos(fuzz(p))
     if (getWinningType(pointlist, p) == modeltype)
     {
       break
     }
   }
-  p <- vpos(fuzz(p))
   pp <- tibble(modelType=modeltype,
                t01=p[1],
                t02=p[2],
