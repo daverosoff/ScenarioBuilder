@@ -16,7 +16,7 @@ sn <- function(x,digits)
 
 fuzz <- function(pointlist) {
   n <- length(pointlist)
-  fz <- runif(n, min = -0.05, max = 0.05)
+  fz <- runif(n, min = -0.2, max = 0.2)
   pointlist + fz
 }
 
@@ -176,6 +176,7 @@ randomScenario <- function(modeltype, pointlist) {
       break
     }
   }
+  p <- vpos(fuzz(p))
   pp <- tibble(modelType=modeltype,
                t01=p[1],
                t02=p[2],
