@@ -1,0 +1,6 @@
+r = amount of compost coming in, [r] = MT^-1
+D = decomposition rate, [D] = L^3 T^-1
+F = consumption by residents, [F] = MT^-1
+Q = rate of compost volume, [Q] = L^3T^-1
+k = proportionality constant, [k] = M^-1/2 T^1/4
+

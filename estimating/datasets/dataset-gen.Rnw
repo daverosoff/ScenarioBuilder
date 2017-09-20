@@ -1,0 +1,209 @@
+\documentclass{article}
+
+\usepackage[margin=0.5in]{geometry}
+\linespread{1.15}
+%\setlength{\parskip}{1ex}
+%\setlength{\parindent}{0pt}
+% \usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{cofi}
+% \usepackage{fourier}
+\usepackage{titling}
+\usepackage{lipsum}
+% \usepackage[printwatermark]{xwatermark}
+% \newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
+\setlength{\droptitle}{-0.6in}
+\pretitle{\Large}
+\title{Math 150}
+\posttitle{\hfill}
+\preauthor{\hfill\Large}
+\author{Project 2 dataset and other important information}
+\postauthor{\hfill}
+\predate{\hfill\Large}
+\date{Fall 2017}
+\postdate{}
+
+\begin{document}
+\SweaveOpts{concordance=FALSE, digits=4, scipen=17}
+
+\thispagestyle{empty}
+\maketitle
+\sisetup{group-separator={,}}
+\thispagestyle{empty} \pagestyle{empty}
+
+<<echo=FALSE>>=
+source("sb.R")
+@
+
+<<echo=FALSE>>=
+library(tidyverse)
+library(mosaic)
+library(stringr)
+library(uuid)
+currtime <- lubridate::now()
+currtime.s <- gsub(pattern="[\\s :]", replacement="-", x=currtime)
+lasttime <- as.numeric(str_sub(currtime, -2, -1)) %% 4
+if (lasttime == 0) {
+    pairtype <- c("S", "P")
+} else if (lasttime == 1) {
+    pairtype <- c("S", "T")
+} else if (lasttime == 2) {
+    pairtype <- c("T", "E")
+} else if (lasttime == 3) {
+    pairtype <- c("E", "P")
+}
+id <- str_sub(UUIDgenerate(), 1, 8)
+write_file(id, "group_id.txt")
+pick <- sample(1:2, 1)
+other <- ifelse(pick == 1, 2, 1)
+modelType <- pairtype[pick]
+# modelType <- "P"
+otherType <- pairtype[other]
+# otherType <- "T"
+datafilename <- paste0("budworm-", id, ".csv")
+urlbase <- "https://webwork.collegeofidaho.edu/MAT150Resources/"
+datafileurl <- paste0(urlbase, datafilename)
+winner <- randomScenario(modelType, wks)
+write_csv(winner %>% select(-modelType), paste0("budworm-", id, ".csv"))
+init.budworm <- 200 * sample(2:7, 1)
+crit.budworm <- 0.35 * sample(3:7, 1) * init.budworm
+crit.pct <- 5 * sample(10:17, 1)
+forest.size <- 1e3 * sample(7:13, 1)
+sqkm.cost <- 1 * sample(8:12, 1)
+budworm.cost <- 0.008 * sample(3:6, 1)
+forest.budget <- 1e6
+#winner
+@
+
+<<echo=FALSE>>=
+winner.ys <- extract(winner)
+winnerModel <- getModel(wks, winner.ys, modelType)
+otherModel <- getModel(wks, winner.ys, otherType)
+winnerRes <- res(wks, winner.ys, winnerModel)
+otherRes <- res(wks, winner.ys, otherModel)
+winner2D <- D(winnerModel(x)~x)
+fz <- findZeros(winner2D(x)~x, x.lim=range(0,26))
+winnerInt <- antiD(winnerModel(x)~x)
+# paste("Zeroes", fz)
+# paste("Winner residue", winnerRes)
+# paste("Distractor residue", otherRes)
+@
+
+
+\section*{Group ID: \Sexpr{id}, generated at \Sexpr{currtime}}
+
+Your dataset is available at
+
+{\centering{}\texttt{\Sexpr{datafileurl}}}
+
+It reports the growth rate in budworm larvae per square meter per week for
+each of the first 12 weeks of the season, as measured by the forest service
+agencies. The two models you have to choose from are
+
+<<echo=FALSE>>=
+winnerfirst <- sample(0:1, 1)
+if (winnerfirst == 0) {
+  fst <- getFormula(modelType)
+  snd <- getFormula(otherType)
+} else {
+  fst <- getFormula(otherType)
+  snd <-getFormula(modelType)
+}
+@
+
+\begin{center}
+  \Sexpr{fst} and \Sexpr{snd}.
+\end{center}
+
+Note also that
+\begin{compactenum}
+    \item Forest service entomology crews reported about
+    \num{\Sexpr{init.budworm}} budworm larvae per square meter on May 1. The forested
+    area you are responsible for is about \Sexpr{forest.size} square kilometers.
+    \item The critical threshold for forest destruction is \num{\Sexpr{crit.budworm}}
+    budworm larvae per square meter. However, if this threshold is exceeded after week 22, it
+    is expected that cold weather will kill the budworms before they can cause excessive damage.
+    \item The pesticide is only effective if it is applied within 10 weeks after the
+    population growth rate first exceeds \SI{\Sexpr{crit.pct}}{\%} of its
+    maximum. Otherwise, budworm reproduction is too quick and the infestation
+    will persist. It can be applied as soon as the first day of week 14.
+    \item There is a fixed cost of \Sexpr{sqkm.cost} dollars per square kilometer and variable
+    cost of \Sexpr{budworm.cost} dollars per thousand budworm larvae per square kilometer. The budget
+    for your forest is \Sexpr{forest.budget} dollars.
+\end{compactenum}
+
+%%%%%%%%%%%% BEGIN ANSWER KEY SECTION %%%%%%%%%%%%%%
+
+\section*{Key for group \Sexpr{id}}
+
+% \subsection*{Key to models}
+% \begin{compactitem}
+%   \item S: \Sexpr{getFormula("S")}
+%   \item T: \Sexpr{getFormula("T")}
+%   \item E: \Sexpr{getFormula("E")}
+%   \item P: \Sexpr{getFormula("P")}
+% \end{compactitem}
+
+\begin{compactenum}
+  \item Initial budworm population: \SI{\Sexpr{init.budworm}}{m^{-2}}
+  \item Budworm growth rates from dataset:
+
+<<echo=FALSE>>=
+  winner %>% select(t01:t12) %>% print(width = Inf)
+@
+  % \begin{tabular}{rrrrrrrrrrrr}
+  %   01 & 02 & 03 & 04 & 05 & 06 & 07 & 08 & 09 & 10 & 11 & 12 \\
+  %   \Sexpr{winner.ys[1]} & \Sexpr{winner.ys[2]} & \Sexpr{winner.ys[3]} &
+  %   \Sexpr{winner.ys[4]} & \Sexpr{winner.ys[5]} & \Sexpr{winner.ys[6]} &
+  %   \Sexpr{winner.ys[7]} & \Sexpr{winner.ys[8]} & \Sexpr{winner.ys[9]} &
+  %   \Sexpr{winner.ys[10]} & \Sexpr{winner.ys[11]} & \Sexpr{winner.ys[12]}
+  % \end{tabular}
+  \item Model choices: \Sexpr{modelType} (correct), \Sexpr{otherType}
+  \item Model function: \Sexpr{getModel(wks, winner.ys, modelType, visible=TRUE)}
+  \item Critical points of budworm rate with rate values: 
+
+<<echo=FALSE>>=
+  crit_pt <- unlist(c(0, fz, 26))
+  rate_val <- winnerModel(crit_pt)
+  maxpos <- which.max(rate_val)
+  maxtime <- crit_pt[maxpos]
+  maxrate <- max(rate_val)
+  critrate <- crit.pct / 100 * maxrate
+  as.matrix(rbind(crit_pt, rate_val))
+  rate_exceeded <- makeFun(winnerModel(x)-critrate~x, critrate=critrate)
+  rate_exceeded_time <- findZeros(rate_exceeded(x)~x, x.lim=range(0,26))[[1,1]]
+  rate_too_late <- rate_exceeded_time < 4
+  pop_exceeded <- makeFun(winnerInt(x) - winnerInt(0)-crit.budworm~x, crit.budworm=crit.budworm)
+  pop_exceeded_time <- findZeros(pop_exceeded(x)~x, x.lim=range(0,26))
+  pop_thresh <- length(pop_exceeded_time) != 0
+@
+  \item Critical rate threshold: \Sexpr{critrate}
+  \item Rate first exceeded: \Sexpr{rate_exceeded_time}
+  \item Too late for pesticide: \Sexpr{ifelse(rate_too_late, "yes", "no")}
+  \item Pop.{} threshold first exceeded: \Sexpr{ifelse(pop_thresh, pop_exceeded_time, "Never")}
+  \item Spraying necessary: \Sexpr{ifelse(pop_thresh && pop_exceeded_time < 22, "yes", "no")}
+  \item Fixed cost of spraying: \Sexpr{fc <- forest.size * sqkm.cost}
+  \item Variable cost of spraying: \Sexpr{vc <- (winnerInt(12) - winnerInt(0) + init.budworm)*forest.size*budworm.cost}
+  \item Total cost of spraying: \Sexpr{fc + vc -> tc}
+  \item Cost of spraying is within budget: \Sexpr{ifelse(tc <= forest.budget, "yes", "no")}
+  
+% <<echo=FALSE>>=
+%   maxint <- pmax(winnerModel(fz))  
+%   maxtime <- which.max(c(winnerModel(0), winnerModel(26)))
+%   if maxtime > max
+%     paste("\\\\item Note: max achieved at", maxtime)
+%   }
+% @
+\end{compactenum}
+
+\newpage
+
+<<fig=TRUE, out.width=3>>=
+plotFun(winnerInt(x)+b~x, x.lim=range(0,26), b=init.budworm)
+plotFun(b~x, b=crit.budworm, add=TRUE, col='blue')
+@
+
+
+%%%%%%%%%%%% END ANSWER KEY SECTION %%%%%%%%%%%%%%
+
+\end{document}
