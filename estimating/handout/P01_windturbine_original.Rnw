@@ -42,7 +42,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 \posttitle{\hfill}
 \preauthor{\hfill\Large}
 \author{Project 1: Wind for Coal}
-\postauthor{\hfill Group ID: \Sexpr{id}}
+\postauthor{\hfill}
 \predate{\hfill\Large}
 \date{September 25, 2017}
 \postdate{}
@@ -57,6 +57,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 % \NewDocumentCommand{\trialWatt}{}{\num{400}}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 %\SweaveOpts{concordance=TRUE}
 
 \thispagestyle{empty}
@@ -257,13 +258,17 @@ the semester, if necessary, to adjust final grades.
 This project counts for 10\% of your final grade. Please make sure that
 your report's qualities of clarity, completeness, and correctness
 reflect your best abilities. Please carefully read all the instructions
-and resources provided.
+and resources provided. \hfill Group ID: \Sexpr{id}
 
 %%%%%%%%%%%% BEGIN ANSWER KEY SECTION %%%%%%%%%%%%%%
 
 \newpage
 
 \section*{Key for group \Sexpr{id}}
+
+\begin{equation*}
+  P = k v^3 L^2 \delta
+\end{equation*}
 
 For the trial turbine:
 
