@@ -10,6 +10,7 @@ import argparse
 def newscen():
     tmpdir = tempfile.mkdtemp(prefix="newscen-", dir=".")
     shutil.copy("P01_windturbine_original.Rnw", tmpdir)
+    shutil.copy("windturbines.png", tmpdir)
     # shutil.copy("sb.R", tmpdir)
     os.chdir(tmpdir)
     subprocess.call(["R", "CMD", "Sweave", "P01_windturbine_original.Rnw"])
