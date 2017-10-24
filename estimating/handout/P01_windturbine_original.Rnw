@@ -57,7 +57,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 % \NewDocumentCommand{\trialWatt}{}{\num{400}}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 %\SweaveOpts{concordance=TRUE}
 
 \thispagestyle{empty}
@@ -67,7 +67,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 
 
 <<echo=FALSE>>=
-mph.to.ms <- 4.4704 # mph to m/s
+mph.to.ms <- 0.44704 # mph to m/s
 ft.to.m <- 0.3048 # ft to m
 better.watt <- (1 + percent.increase) * trial.watt
 k <- better.watt / ((mph.trial*mph.to.ms)^3 * (old.length*ft.to.m)^2 * air.density)
