@@ -10,8 +10,8 @@
 \usepackage{cofi}
 \usepackage{fourier}
 \usepackage{titling}
-\usepackage[printwatermark]{xwatermark}
-\newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
+%\usepackage[printwatermark]{xwatermark}
+%\newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
 
 <<echo=FALSE>>=
 library(tidyverse)
@@ -41,7 +41,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 \title{MAT-150}
 \posttitle{\hfill}
 \preauthor{\hfill\Large}
-\author{Project 1: Wind for Coal}
+\author{Project 1: When the Coal Winds Blow}
 \postauthor{\hfill}
 \predate{\hfill\Large}
 \date{September 25, 2017}
@@ -58,7 +58,6 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 
 \begin{document}
 %\SweaveOpts{concordance=TRUE}
-%\SweaveOpts{concordance=TRUE}
 
 \thispagestyle{empty}
 \maketitle
@@ -67,7 +66,7 @@ trial.watt <- 1000 * (12 + sample(-1:1, 1)) # W
 
 
 <<echo=FALSE>>=
-mph.to.ms <- 0.44704 # mph to m/s
+mph.to.ms <- 4.4704 # mph to m/s
 ft.to.m <- 0.3048 # ft to m
 better.watt <- (1 + percent.increase) * trial.watt
 k <- better.watt / ((mph.trial*mph.to.ms)^3 * (old.length*ft.to.m)^2 * air.density)

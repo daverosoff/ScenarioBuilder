@@ -21,7 +21,7 @@ def newscen():
     newsoltex = group_id + "-solution.tex"
     newsolpdf = group_id + "-solution.pdf"
     # csv = "windfarm-" + group_id + ".csv"
-    newf = [newRnw, newsoltex, newsolpdf]
+    newf = [newRnw, newsoltex, newsolpdf, "windturbines.png"]
     shutil.move("P01_windturbine_original.Rnw", newRnw)
     shutil.move("P01_windturbine_original.tex", newsoltex)
     subprocess.call(["pdflatex", "--interaction=nonstopmode", newsoltex])
@@ -29,6 +29,7 @@ def newscen():
     os.mkdir(group_id)
     for f in newf:
         shutil.copy2(tmpdir + "/" + f, group_id)
+        print("Copying", f, "to", group_id)
     # shutil.copy2(tmpdir + "/" + csv, group_id)
     os.chdir(group_id)
     redactedtex = re.sub("-solution.tex", ".tex", newsoltex)
@@ -40,6 +41,7 @@ def newscen():
     tmpdir = tempfile.mkdtemp(prefix="redacted-", dir=".")
     print("Moving", redactedtex, "to", tmpdir)
     shutil.move(redactedtex, tmpdir)
+    shutil.copy("windturbines.png", tmpdir)
     os.chdir(tmpdir)
     subprocess.call(["pdflatex", "--interaction=nonstopmode", redactedtex])
     shutil.move(redactedtex, "../" + redactedtex)
