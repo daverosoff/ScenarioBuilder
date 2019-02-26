@@ -11,7 +11,7 @@ def newscen():
     tmpdir = tempfile.mkdtemp(prefix="tmpdir-", dir=".")
     rnwfile = "fireSeason.Rnw"
     texfile = "fireSeason.tex"
-    subprocess.call(["Rscript", "-e", "library(knitr);", "knit({})".format(rnwfile)])
+    subprocess.call(["Rscript", "--verbose", "-e", "library(knitr)", "-e", "knit('{}')".format(rnwfile)])
     shutil.copy(rnwfile, tmpdir)
     shutil.copy(texfile, tmpdir)
     # shutil.copy("sb.R", tmpdir)

@@ -1,0 +1,255 @@
+\documentclass[11pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[margin=0.5in]{geometry}
+\linespread{1.10}
+%\setlength{\parskip}{1ex}
+%\setlength{\parindent}{0pt}
+% \usepackage{parskip}
+\usepackage{siunitx}
+\sisetup{group-separator={,},
+group-minimum-digits=6,
+inter-unit-product=\ensuremath{{}\cdot{}}}
+\usepackage{cofi}
+\usepackage{fourier}
+\usepackage{titling}
+\usepackage[printwatermark]{xwatermark}
+\newwatermark[allpages,color=black!20,angle=-55,scale=6,xpos=30,ypos=10]{DRAFT}
+\setlength{\droptitle}{-0.6in}
+\pretitle{\Large}
+\title{MAT-150}
+\posttitle{\hfill}
+\preauthor{\hfill\Large}
+\author{Project 1: Wind for Coal}
+\postauthor{\hfill}
+\predate{\hfill\Large}
+\date{February 26, 2019}
+\postdate{}
+% \usepackage{Sweave}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+
+\thispagestyle{empty}
+\maketitle
+\thispagestyle{empty} \pagestyle{empty}
+
+
+
+
+
+
+
+% \section*{Group ID: id}
+
+\section*{Project goals}
+\begin{compactitem}
+    \item Practice modeling a real-world phenomenon that is not a routine
+        homework exercise
+    \item Become more comfortable with open-ended problems
+    \item Practice communicating and explaining mathematical results clearly    and professionally
+    \item Practice working in a team on a mathematical problem
+\end{compactitem}
+
+
+\subsection*{Project synopsis}
+% \vspace{-2.8ex}
+
+    You and your group members are mathematical consultants coordinating with
+    several government agencies, including the Bureau of Land Management, the
+    Department of the Interior, and the National Interagency Fire Center
+    (headquartered in the nearby town of Lladclew). These agencies are tasked with the
+    development of a model to predict the length of the fire season in the
+    a geographic region called the Great Basin. Your group is aware
+    that fire prediction and mapping is a highly refined science, but also
+    appreciates the value of a good initial estimate, obtained without much
+    expense. Part of the team's objective is to conduct a sensitivity analysis,
+    since fire season outcomes seem to be more variable in recent years. More
+    is explained below.
+
+    Your team had an opportunity to consult with more experienced
+    fire scientists and you discussed some of the basic ideas of wildfire
+    prediction. They even gave you some formulas, but the notes from the
+    meeting were lost, and you weren't too sure you understood all of it
+    anyway. However, you do remember that they said that you can get
+    modestly good estimates using dimensional analysis. More details are
+    included below.
+
+\subsection*{Useful facts and objectives}
+% \vspace{-2.8ex}
+
+    \begin{compactitem}
+
+        \item Unlike many scenarios you have trained on, this situation
+        requires a proportionality constant that carries dimensions: namely,
+        $[K] = L^{1} M^{1.50} \Theta^{-0.50} T^{0.50}$.
+        You hope to estimate the constant $K$ from the data you have.
+
+        \item Lacking a more sophisticated model, your team agrees that
+        dimensional analysis might help in determining an expression for the
+        length of the fire season, $S$, in terms of the May--June average
+        maximum daily temperature, $Q$, and some other important quantities,
+        namely:
+        \begin{compactenum}
+            \item the January--June average accumulated precipitation, $L$;
+            \item the mass density of vegetation per unit area, $\delta$; and
+            \item the May--June average cumulative temperature excess, $X$. This
+            is measured in \emph{degree-days} \si{\celsius.day}.
+        \end{compactenum}
+
+        \item Data indicate that the May--June average maximum daily temperature in
+        the Great Basin in 2017 was
+        \SI{12.37}{\celsius}. The January--June average
+        accumulated precipitation in 2017 was
+        \SI{54.80}{mm}. The density of vegetation is
+        estimated to be about $\SI{6.15}{kg/m^2}$ in this region.
+        The May--June average cumulative temperature excess for 2017 was
+        $\SI{27.46}{\celsius.day}$. Finally, the 2017 fire season
+        lasted $\num{101}$ days. You will base your model on these
+        data.
+
+        \item Weather patterns have been more highly variable in the past several years
+        compared to historical trends. Consider the effects that slight changes to the
+        quantities in your model will have on the length of the fire season. For the
+        each change that you consider, compute the length of the fire season and give the
+        percent change in season length induced by each of your changes. (Note: a contour
+        plot is a useful tool to see the values of a function of two variables.)
+
+    \end{compactitem}
+
+% \newpage
+
+    Your team must now pull together all of its ideas to calculate an estimate
+    of the Great Basin fire season in 2019 under several possible conditions. You
+    should report all answers with three significant digits. Once you finish
+    your calculations, your team should write a professional report restating
+    the problem and summarizing your work and your findings. Your report will be
+    read by the official who determine the fire management budget and strategy, so
+    a rough report just won't do. It must clearly explain your calculations and
+    results. Further, your report must contain at least one
+    meaningful, carefully labeled graph that adds something to the argument
+    your team is making.
+
+ %\newpage
+
+\subsection*{Timeline of project}
+% \vspace{-2.8ex}
+
+\begin{compactdesc}
+    \item[Preliminary check-in:] Thursday/Friday, March 7/8, with your
+    instructor at a scheduled time.
+    \item[Final report due:] Wednesday, March 13, at the beginning of
+    class, in Canvas.
+    \item[Group evaluations due:]  Wednesday, March 13, by 11:59pm, in
+    Canvas.
+    \item[Final interview:] Thursday/Friday, March 14/15, with your
+    instructor at a scheduled time.
+    \item[Late papers/group evaluations:] will not be accepted.
+\end{compactdesc}
+
+\subsection*{Preliminary check-in and final interview meetings}
+% \vspace{-2.8ex}
+
+Your group turns in one report in Canvas and everyone in the group gets the
+same grade for the Written Report section for this project. The Written Report
+accounts for $35\%$ of your Project 1 grade.  The rest of your score ($65\%$)
+is earned during the Preliminary Check-in and Final Interview meetings with
+your instructor. In these meetings, you will answer a question regarding the
+development of the report's results to demonstrate your participation in the
+project. Your group will also submit the introduction to your report in Canvas
+(see grading rubric). You are expected to participate in the project,
+understanding both the solution to the problem and the process by which it was
+obtained.
+
+\subsection*{Written report}
+% \vspace{-2.8ex}
+
+Use Microsoft Word or another suitable word processor. Type all equations,
+using (for example) the Microsoft Equation Editor built into Word and standard
+mathematical notation. Use RStudio to make all graphs. Graphs must include
+proper axis labels, captions/titles, etc. Group members' names must be clearly
+visible on the front page of your report. Margins will not exceed 1 inch and
+lines are to be no more than 1.5-spaced. Use a font such as Palatino or Times
+New Roman with a font size of no more than 12 points.
+
+Reports will be self-contained, i.e., the reader will not need prior knowledge
+or understanding of the problem to understand your report. Your calculations
+and conclusions will be explained in detail, as befits a professional report.
+This report will be read by people of varying mathematical background, so do
+your best to keep your report at a level accessible to the widest possible
+audience (in other words, try to write for the general public whenever
+possible). Your explanation and presentation are as important as the
+mathematics, but of course your mathematical analysis must be clear, complete,
+and correct. It should go without saying that your grammar, punctuation, and
+spelling will be flawless. All outside sources, including websites, used in
+your report must be properly cited.
+
+\subsection*{Group evaluation}
+% \vspace{-2.8ex}
+
+Every group member is required to submit an informal group valuation
+\emph{before midnight on the same day the reports are due} in Canvas. The
+evaluation is at most a short paragraph about how well the group worked
+together. The evaluation \emph{must} include your estimate of the share of the
+project work that you feel each group member did, expressed as a percentage
+(e.g.~33\%/33\%/33\% or 40\%/30\%/30\%, etc.). These percentages must add to
+100\%---or 99\% is close enough. These evaluations will be held in confidence,
+and used at the end of the semester, if necessary, to adjust final grades.
+
+\subsection*{A word to the wise}
+% \vspace{-2.8ex}
+
+Make sure that your report's qualities of clarity, completeness, and
+correctness reflect your best abilities. Carefully read all the instructions
+and resources provided.
+
+
+\end{document}
