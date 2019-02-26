@@ -1,4 +1,54 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 \usepackage[margin=0.5in]{geometry}
 \linespread{1.10}
 %\setlength{\parskip}{1ex}
@@ -24,6 +74,7 @@ inter-unit-product=\ensuremath{{}\cdot{}}}
 \date{February 27, 2019}
 \postdate{}
 % \usepackage{Sweave}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 %\SweaveOpts{concordance=TRUE}
 
@@ -31,47 +82,13 @@ inter-unit-product=\ensuremath{{}\cdot{}}}
 \maketitle
 \thispagestyle{empty} \pagestyle{empty}
 
-<<libraries, echo=FALSE>>=
-library(knitr)
 
-old_inline <- knit_hooks$get("inline")
-inline_hook <- function(x) {
-    if (is.numeric(x)) {
-        # if integer, print without decimal; otherwise, four places
-        res <- ifelse(x == round(x),
-            sprintf("%d", x),
-            sprintf("%.2f", x)
-        )
-        paste(res, collapse=", ")
-    }
-}
 
-knit_hooks$set(inline=inline_hook)
 
-library(readr)
-# library(mosaic)
-library(stringr)
-library(uuid)
-@
 
-<<setup1, echo=FALSE>>=
-id <- str_sub(UUIDgenerate(), 1, 8)
-write_file(id, "group_id.txt")
-maxtemp <- sample(12:19,1) + runif(1) # degrees celsius
-precip <- sample(54:66,1) + runif(1)# mm
-excess <- sample(22:37,1) + runif(1) # degree-day
-density <- sample(6:12, 1) + runif(1)# kg per m^2
-season <- sample(10*9:15, 1) + sample(0:9,1) # day
-@
 
-<<setup2, echo=FALSE>>=
-x <- sample(1:2, 1)
-y <- 1/2 + 1/2*sample(0:2, 1)
-z <- -1/2*sample(0:2, 1)
-w <- z - 1/2*sample(0:2, 1)
-@
 
-% \section*{Group ID: \Sexpr{id}}
+% \section*{Group ID: id}
 
 \section*{Project goals}
 \begin{compactitem}
@@ -112,7 +129,7 @@ w <- z - 1/2*sample(0:2, 1)
 
         \item Unlike many scenarios you have trained on, this situation
         requires a proportionality constant that carries dimensions: namely,
-        $[K] = L^{\Sexpr{x}} M^{\Sexpr{y}} \Theta^{\Sexpr{z}} T^{\Sexpr{w}}$.
+        $[K] = L^{2} M^{1.50} \Theta^{0} T^{-0.50}$.
         You hope to estimate the constant $K$ from the data you have.
 
         \item Lacking a more sophisticated model, your team agrees that
@@ -129,13 +146,13 @@ w <- z - 1/2*sample(0:2, 1)
 
         \item Data indicate that the May--June average maximum daily temperature in
         the Great Basin in 2017 was
-        \SI{\Sexpr{maxtemp}}{\celsius}. The January--June average
+        \SI{19.81}{\celsius}. The January--June average
         accumulated precipitation in 2017 was
-        \SI{\Sexpr{precip}}{mm}. The density of vegetation is
-        estimated to be about $\SI{\Sexpr{density}}{kg/m^2}$ in this region.
+        \SI{60.45}{mm}. The density of vegetation is
+        estimated to be about $\SI{12.41}{kg/m^2}$ in this region.
         The May--June average cumulative temperature excess for 2017 was
-        $\SI{\Sexpr{excess}}{\celsius.day}$. Finally, the 2017 fire season
-        lasted $\num{\Sexpr{season}}$ days. You will base your model on these
+        $\SI{31.49}{\celsius.day}$. Finally, the 2017 fire season
+        lasted $\num{143}$ days. You will base your model on these
         data.
 
         \item Weather patterns have been more highly variable in the past several years
@@ -233,26 +250,5 @@ Make sure that your report's qualities of clarity, completeness, and
 correctness reflect your best abilities. Carefully read all the instructions
 and resources provided.
 
-%%%%%%%%%%%% BEGIN ANSWER KEY SECTION %%%%%%%%%%%%%%
-
-\newpage
-
-\section*{Key for group \Sexpr{id}}
-
-<<solution, echo=FALSE>>=
-knit_hooks$set(inline=old_inline)
-a <- w - 1 - z
-b <- -2*y - x
-c <- -y
-d <- 1 - w
-K.no.convert <- season / (maxtemp^a * precip^b * density^c * excess^d)
-K.meters <- K.no.convert/(1000^b)
-@
-
-Formula: $S = \Sexpr{K.no.convert} Q^{\Sexpr{a}} L^{\Sexpr{b}} \delta^{\Sexpr{c}} X^{\Sexpr{d}}$
-
-Formula if convert to meters: $S = \Sexpr{K.meters} Q^{\Sexpr{a}} L^{\Sexpr{b}} \delta^{\Sexpr{c}} X^{\Sexpr{d}}$
-
-%%%%%%%%%%%% END ANSWER KEY SECTION %%%%%%%%%%%%%%
 
 \end{document}
